@@ -17,11 +17,11 @@ export const sendEmail = async({email, emailType, userId} : any) => {
 
 
         var transport = nodemailer.createTransport({
-            host: "smtp.ethereal.email",
-            port: 587,
+            host: "sandbox.smtp.mailtrap.io",
+            port: 2525,
             auth: {
-                user: process.env.USERNAME,
-                pass: process.env.PASSWORD,
+                user: process.env.MAILTRAP_USER,
+                pass: process.env.MAILTRAP_PASS,
             }
         });
 
@@ -30,9 +30,7 @@ export const sendEmail = async({email, emailType, userId} : any) => {
             from: 'auth@gmail.com',
             to: email,
             subject: emailType === "VERIFY" ? "Verify your email" : "Reset your Password",
-            html: `<p>Click <a href="${process.env.DOMAIN}/verifyemail?token=${hashedToken}">here</a> to $
-            {emailType === "VERIFY" ? "Verify your email" : Reset your Password}
-            </p>`
+           html: `<p>Click <a href="${process.env.DOMAIN}/${emailType === "VERIFY"? "verifyemail" : "changepassword"}?token=${hashedToken}">here</a> to ${emailType === "VERIFY" ? "verify your email" : "reset your password"}.</p>`
         }
 
         const mailresponse = await transport.sendMail(mailOptions);

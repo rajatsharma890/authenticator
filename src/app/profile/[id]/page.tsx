@@ -1,5 +1,11 @@
+import User from "@/models/userModel"
+import { error } from "console"
+import { NextResponse } from "next/server"
+
 export default async function UserProfile({params}: any) {
-    const user = await params.id
+    const {id} = await params
+    const user = await User.findById(id)
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-950 to-gray-800 text-white font-serif p-4">
             
@@ -16,7 +22,10 @@ export default async function UserProfile({params}: any) {
                 </p>
                 
                 <div className="bg-gray-800 border border-gray-600 p-6 rounded-md font-mono text-3xl md:text-5xl font-extralight text-teal-400 break-all leading-tight shadow-inner shadow-gray-700/30">
-                    {user}
+                    <p><span className="text-gray-400">UserId:</span> {user._id.toString()}</p>
+                    <p><span className="text-gray-400">Username:</span> {user.username}</p>
+                    <p><span className="text-gray-400">E-Mail:</span> {user.email}</p>
+                    <p><span className="text-gray-400">IsVerified:</span> {user.isVerified ? "True" : "False"}</p>
                 </div>
                 
             </div>
