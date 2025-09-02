@@ -3,7 +3,7 @@ import User from "@/models/userModel";
 export default async function UserProfile({
   params,
 }: {
-  params: { id: string };
+  params: {id: String};
 }) {
   const { id } = params;
   const user = await User.findById(id);
