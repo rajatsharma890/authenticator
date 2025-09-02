@@ -1,11 +1,7 @@
 import User from "@/models/userModel";
 
-export default async function ProfilePage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const { id } = params;
+export default async function ProfilePage({params}:{params:{id: string}}) {
+  const {id} = params;
   const user = await User.findById(id);
 
   return (
