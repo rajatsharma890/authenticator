@@ -4,8 +4,6 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { sendEmail } from "@/helpers/mailer";
-import { NextResponse } from "next/server";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -27,12 +25,12 @@ export default function LoginPage() {
       console.log("Login success", response.data);
       toast.success("Login success");
       router.push("/profile");
-    } catch (error: any) {
-      console.log("Login Failed", error.response?.data);
-      const errorMessage =
-        error.response?.data?.error ||
-        "Login failed. Please check your credentials.";
-      toast.error(errorMessage);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
     } finally {
       setloading(false);
     }
@@ -46,9 +44,12 @@ export default function LoginPage() {
 
       await axios.post("/api/users/forgotpassword", { email: user.email });
       toast.success("Password reset email sent! Check your inbox.");
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "Failed to send email.");
-      console.log("Forgot password failed", error.response?.data);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
     } finally {
       setloading(false);
     }
@@ -66,7 +67,7 @@ export default function LoginPage() {
     } else {
       setButtonDisabled(true);
     }
-  }, [user]);
+  }, [user, loading]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-900 text-gray-200 px-4">
@@ -117,7 +118,7 @@ export default function LoginPage() {
         href="/signup"
         className="text-sm text-purple-400 hover:text-purple-300 hover:underline transition duration-300"
       >
-        Don't have an Account? Create Account
+        Don&apos;t have an Account? Create Account
       </Link>
 
       <button

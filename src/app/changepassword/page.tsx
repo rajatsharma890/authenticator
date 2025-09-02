@@ -41,9 +41,12 @@ export default function ResetPasswordPage() {
       });
       toast.success("Password reset successfully!");
       window.location.href = "/login"; // Replaced router.push
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || "An error occurred.");
-      console.log("Password reset failed", error.response?.data);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
     } finally {
       setLoading(false);
     }

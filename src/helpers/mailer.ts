@@ -1,9 +1,15 @@
 import nodemailer from 'nodemailer';
 import User from '@/models/userModel';
 import bcrypt from 'bcryptjs';
-import { Html } from 'next/document';
+import toast from 'react-hot-toast';
 
-export const sendEmail = async({email, emailType, userId} : any) => {
+interface SendEmailParams {
+  email: string;
+  emailType: "VERIFY" | "RESET";
+  userId: string;
+}
+
+export const sendEmail = async({email, emailType, userId}: SendEmailParams) => {
     try {
 
         const hashedToken = await bcrypt.hash(userId.toString(), 10);
@@ -16,7 +22,7 @@ export const sendEmail = async({email, emailType, userId} : any) => {
         }
 
 
-        var transport = nodemailer.createTransport({
+        const transport = nodemailer.createTransport({
             host: "sandbox.smtp.mailtrap.io",
             port: 2525,
             auth: {
@@ -36,7 +42,11 @@ export const sendEmail = async({email, emailType, userId} : any) => {
         const mailresponse = await transport.sendMail(mailOptions);
         return mailresponse;
         
-    } catch (error:any) {
-        throw new Error(error.message);
+    } catch (error:unknown) {
+        if (error instanceof Error) {
+            toast.error(error.message);
+        } else {
+        toast.error('An unexpected error occurred.');
+        }
     }
 }

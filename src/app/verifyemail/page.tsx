@@ -2,6 +2,7 @@
 import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function VerifyEmailPage() {
   const [token, setToken] = useState("");
@@ -12,11 +13,15 @@ export default function VerifyEmailPage() {
     try {
       await axios.post("/api/users/verifyemail", { token });
       setVerified(true);
-      setError(false); 
-    } catch (error: any) {
+      setError(false);
+    } catch (error: unknown) {
       setError(true);
-      setVerified(false); 
-      console.log(error.response.data);
+      setVerified(false);
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
     }
   };
 
@@ -32,7 +37,7 @@ export default function VerifyEmailPage() {
     if (token.length > 0) {
       verifyUserEmail();
     }
-  }, [token]);
+  }, [token, verifyUserEmail]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-50 dark:bg-gray-900">
