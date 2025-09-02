@@ -1,7 +1,11 @@
 import User from "@/models/userModel";
 
-export default async function ProfilePage({params}:{params:{id: string}}) {
-  const {id} = params;
+export default async function ProfilePage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const { id } = params;
   const user = await User.findById(id);
 
   return (
@@ -10,11 +14,8 @@ export default async function ProfilePage({params}:{params:{id: string}}) {
         <h1 className="text-4xl font-light text-gray-100 mb-2 tracking-wide">
           User Profile
         </h1>
-
         <hr className="border-t border-gray-700 mx-auto w-24 opacity-70" />
-
         <p className="text-xl text-gray-400 mt-6">Viewing details for:</p>
-
         <div className="bg-gray-800 border border-gray-600 p-6 rounded-md font-mono text-3xl md:text-5xl font-extralight text-teal-400 break-all leading-tight shadow-inner shadow-gray-700/30">
           <p>
             <span className="text-gray-400">UserId:</span> {user._id.toString()}
