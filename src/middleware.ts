@@ -14,7 +14,7 @@ export function middleware(request: NextRequest){
    }
 
    if(!token && !isPublicPath){
-    return NextResponse.redirect(new URL('/login', request.nextUrl))
+    return NextResponse.redirect(new URL('/signup', request.nextUrl))
    }
 }
 
@@ -25,6 +25,8 @@ export const config = {
         '/profile/:path*',
         '/login',
         '/signup',
-        '/verifyemail'
+        '/verifyemail',
+        '/forgotpassword',
+        '/resetpassword',
     ]
 }
