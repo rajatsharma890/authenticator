@@ -5,7 +5,7 @@ export default async function UserProfile({
 }: {
   params: { id: string };
 }) {
-  const { id } = await params;
+  const { id } = params;
   const user = await User.findById(id);
 
   return (

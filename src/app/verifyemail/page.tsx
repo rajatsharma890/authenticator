@@ -9,22 +9,6 @@ export default function VerifyEmailPage() {
   const [verified, setVerified] = useState(false);
   const [error, setError] = useState(false);
 
-  const verifyUserEmail = async () => {
-    try {
-      await axios.post("/api/users/verifyemail", { token });
-      setVerified(true);
-      setError(false);
-    } catch (error: unknown) {
-      setError(true);
-      setVerified(false);
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error("An unexpected error occurred.");
-      }
-    }
-  };
-
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const urlToken = urlParams.get("token");
@@ -34,10 +18,25 @@ export default function VerifyEmailPage() {
   }, []);
 
   useEffect(() => {
+    const verifyUserEmail = async () => {
+      try {
+        await axios.post("/api/users/verifyemail", { token });
+        setVerified(true);
+        setError(false);
+      } catch (error: unknown) {
+        setError(true);
+        setVerified(false);
+        if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error("An unexpected error occurred.");
+        }
+      }
+    };
     if (token.length > 0) {
       verifyUserEmail();
     }
-  }, [token, verifyUserEmail]);
+  }, [token]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-50 dark:bg-gray-900">
