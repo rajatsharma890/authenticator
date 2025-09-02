@@ -1,8 +1,15 @@
 import User from "@/models/userModel";
+import { notFound } from "next/navigation";
+
+export const dynamic = "force-dynamic";
 
 export default async function ProfilePage({params}:{params:{id: string}}) {
   const {id} = params;
   const user = await User.findById(id);
+
+  if (!user) {
+    notFound();
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-950 to-gray-800 text-white font-serif p-4">
