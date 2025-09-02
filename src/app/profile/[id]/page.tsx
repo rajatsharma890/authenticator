@@ -3,17 +3,12 @@ import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
-interface PageProps {
-  params: Promise<{ [key: string]: string }>;
-  searchParams?: { [key: string]: string | string[] | undefined };
-}
-
 export default async function ProfilePage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const { id } = await params;
+  const { id } = params;
   const user = await User.findById(id);
 
   if (!user) {
